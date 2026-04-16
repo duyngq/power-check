@@ -194,3 +194,7 @@ Template sử dụng placeholders `{{...}}`:
 | `{{TOTAL_COUNT}}` | Tổng số lịch |
 | `{{HIGHLIGHT_COUNT}}` | Số lịch được highlight |
 | `{{SOURCE_URL}}` | URL nguồn |
+
+## 8. TODO
+# Update Readme
+# Send notification to Telegram
