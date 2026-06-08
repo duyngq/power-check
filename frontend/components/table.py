@@ -27,12 +27,13 @@ def build_table_iframe(df: pd.DataFrame, theme: dict, page_size: int = 20) -> st
 <html lang="vi">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}}
 body{{background:{T['bg_card']};color:{T['text_primary']};font-size:13.5px;}}
 /* ── Table ── */
-.wrap{{overflow-x:auto;width:100%;}}
+.wrap{{overflow-x:auto;width:100%;-webkit-overflow-scrolling:touch;}}
 table{{width:100%;border-collapse:collapse;}}
 thead th{{
   padding:10px 12px;text-align:left;font-size:11px;font-weight:700;
@@ -40,6 +41,11 @@ thead th{{
   background:{T['bg_table_head']};border-bottom:2px solid {T['border_hl']};
   white-space:nowrap;cursor:pointer;user-select:none;position:relative;
 }}
+/* table uses auto-layout so columns size to their content */
+table{{min-width:750px;}}
+thead th:nth-child(1){{width:44px;}}
+/* prevent short-content columns from wrapping; browser expands them to fit */
+td:nth-child(1),td:nth-child(3),td:nth-child(4),td:nth-child(7){{white-space:nowrap;}}
 thead th:hover{{opacity:.85;}}
 thead th.center{{text-align:center;}}
 thead th .sort-arr{{margin-left:4px;font-size:10px;opacity:.5;}}
@@ -69,6 +75,7 @@ td.center{{text-align:center;}}
   padding:10px 14px;background:{T['bg_card2']};border-top:1px solid {T['border']};
   flex-wrap:wrap;gap:6px;
 }}
+#pg-top{{position:sticky;top:0;z-index:10;border-top:none;border-bottom:1px solid {T['border']};}}
 .pg-info{{font-size:11.5px;color:{T['text_secondary']};}}
 .pg-btns{{display:flex;gap:4px;align-items:center;flex-wrap:wrap;}}
 button.pg{{
@@ -87,6 +94,18 @@ button.pg:disabled{{opacity:.4;cursor:not-allowed;}}
 ::-webkit-scrollbar{{width:4px;height:4px;}}
 ::-webkit-scrollbar-track{{background:{T['bg_card2']};}}
 ::-webkit-scrollbar-thumb{{background:{T['emerald_hover']};border-radius:3px;}}
+@media(max-width:600px){{
+  body{{font-size:12px;}}
+  thead th{{padding:8px 8px;font-size:10px;letter-spacing:.4px;}}
+  td{{padding:7px 8px;}}
+  .badge-hl{{font-size:9px;padding:1px 4px;}}
+  .badge-tt{{font-size:10px;padding:2px 6px;}}
+  .pg-bar{{padding:8px 10px;gap:4px;}}
+  .pg-info{{font-size:11px;}}
+  button.pg{{padding:3px 7px;font-size:11px;}}
+  .pg-jump{{font-size:11px;}}
+  .pg-jump input{{width:38px;}}
+}}
 </style>
 </head>
 <body>
@@ -171,10 +190,10 @@ function renderTable() {{
       <div class="pg-btns">
         <button class="pg" ${{curPage === 0 ? 'disabled' : ''}} onclick="changePage(0)">«</button>
         <button class="pg" ${{curPage === 0 ? 'disabled' : ''}} onclick="changePage(${{curPage - 1}})">‹</button>
-        \${{renderPageNumbers(totalPages)}}
+        ${{renderPageNumbers(totalPages)}}
         <button class="pg" ${{curPage >= totalPages - 1 ? 'disabled' : ''}} onclick="changePage(${{curPage + 1}})">›</button>
         <button class="pg" ${{curPage >= totalPages - 1 ? 'disabled' : ''}} onclick="changePage(${{totalPages - 1}})">»</button>
-        <div class="pg-jump">Trang <input type="number" value="\${{curPage + 1}}" min="1" max="\${{totalPages}}" onchange="changePage(this.value-1)"> / \${{totalPages}}</div>
+        <div class="pg-jump">Trang <input type="number" value="${{curPage + 1}}" min="1" max="${{totalPages}}" onchange="changePage(this.value-1)"> / ${{totalPages}}</div>
       </div>
     `;
   }});
@@ -216,4 +235,4 @@ renderTable();
 def render_table(df: pd.DataFrame, theme: dict, page_size: int = 20, height: int = 650):
     import streamlit.components.v1 as components
     html = build_table_iframe(df, theme, page_size)
-    components.html(html, height=height, scrolling=False)
+    components.html(html, height=height, scrolling=True)

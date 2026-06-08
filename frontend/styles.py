@@ -179,6 +179,25 @@ def apply_custom_css(T):
     ::-webkit-scrollbar {{ width: 5px; height: 5px; }}
     ::-webkit-scrollbar-track {{ background: {T['bg_card2']}; }}
     ::-webkit-scrollbar-thumb {{ background: {T['emerald_hover']}; border-radius: 3px; }}
+
+    /* ── Responsive ──────────────────────────────────────── */
+    @media (max-width: 768px) {{
+        .filter-panel {{ padding: 0.6rem 0.8rem 0.4rem; }}
+        .filter-label {{ margin-bottom: 0.2rem; }}
+        .stats-bar {{ gap: 0.4rem; }}
+        .stat-card {{ min-width: 80px; padding: 0.6rem 0.5rem; }}
+        .stat-value {{ font-size: 1.4rem !important; }}
+        .stat-label {{ font-size: 0.6rem; }}
+        .app-footer {{ flex-direction: column; text-align: center; gap: 0.2rem; }}
+    }}
+    @media (max-width: 480px) {{
+        .stat-card {{ min-width: 60px; padding: 0.5rem 0.4rem; }}
+        .stat-value {{ font-size: 1.2rem !important; }}
+        div[data-testid="stMultiSelect"] div[data-baseweb="select"],
+        div[data-testid="stTextInput"] input {{
+            font-size: 14px !important;
+        }}
+    }}
     </style>
     """
     st.markdown(css, unsafe_allow_html=True)

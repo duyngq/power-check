@@ -19,7 +19,7 @@ st.set_page_config(
     page_title=f"Lịch Cúp Điện – {PROVINCE_NAME}",
     page_icon="🔌",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="auto",
 )
 
 # =============================================================
@@ -119,10 +119,10 @@ with f_col2:
     khu_vuc_text = st.text_input("Khu Vực", placeholder="Lọc theo khu vực...", label_visibility="collapsed")
 
 with f_col_right:
-    c1, c2 = st.columns([5, 2])
-    with c1:
+    hl_col, btn_col = st.columns([4, 1])
+    with hl_col:
         highlight_only = st.checkbox("📍 Xuân Trường", value=False, help=f"Chỉ hiện các địa điểm thuộc: {get_highlight_areas_display()}")
-    with c2:
+    with btn_col:
         if st.button("🔄", help="Lấy lịch cúp điện mới nhất"):
             with st.status("", expanded=False) as status:
                 success, count = fetch_data()
